@@ -16,11 +16,12 @@ MONGODB_URL="paste your URL here"
     <summary>
         `/todo/add` - Create Todo
     </summary>
-Method: POST
-Body:
-{
-    title: "Todo Title"
-}
+
+    Method: POST
+    Body:
+        {
+            title: "Todo Title"
+        }
 </details>
 
 
