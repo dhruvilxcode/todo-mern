@@ -1,0 +1,21 @@
+{
+  "name": "todo-nodejs",
+  "version": "1.0.0",
+  "description": "Todo App Backend using NodeJS, Mongoose, MongoDB",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "dhruvil",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^6.7.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
