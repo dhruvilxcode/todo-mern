@@ -2,8 +2,17 @@ const { Router } = require("express");
 const Todo = require("../models/todoModel");
 const router = Router();
 
-router.get("/", (req, res)=>{
-    res.send("Get all todo.");
+router.get("/", async (req, res)=>{
+    try {
+        const todos = await Todo.find({});
+
+        res.status(200).json(todos);
+    } catch (error) {
+        console.error(error);
+        res.status(400).json({
+            message: "Something went wrong while getting todo!"
+        });
+    }
 })
 
 router.post("/add", async (req, res)=>{

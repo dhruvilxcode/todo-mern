@@ -14,6 +14,14 @@ MONGODB_URL="paste your URL here"
 
 <details>
     <summary>
+        `/todo` - Get All Todos
+    </summary>
+
+    Method: GET
+</details>
+
+<details>
+    <summary>
         `/todo/add` - Create Todo
     </summary>
 
