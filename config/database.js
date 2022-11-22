@@ -1,9 +1,9 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 (function connectDB() {
     try {
         mongoose.connect(process.env.MONGODB_URL, {
-            useNewUrlParse: true,
+            useNewUrlParser: true,
             useUnifiedTopology: true
         })
     } catch (error) {

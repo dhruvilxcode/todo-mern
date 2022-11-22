@@ -1,11 +1,10 @@
-import dotenv from  "dotenv";
-dotenv.config({});
-import "./config/database";
-import express from "express";
+require("dotenv").config({})
+require("./config/database.js");
+const express = require("express");
 
 
 // routes import
-import todoRoute from "./routes/todo";
+const todoRoute = require("./routes/todo");
 // routes import
 
 
@@ -18,7 +17,7 @@ app.use(express.json())
 
 
 // routes
-app.use("/", todoRoute);
+app.use("/todo", todoRoute);
 // routes
 
 
