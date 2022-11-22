@@ -2,6 +2,7 @@ const { Router } = require("express");
 const Todo = require("../models/todoModel");
 const router = Router();
 
+// get all todos
 router.get("/", async (req, res)=>{
     try {
         const todos = await Todo.find({});
@@ -15,6 +16,7 @@ router.get("/", async (req, res)=>{
     }
 })
 
+// create todo
 router.post("/add", async (req, res)=>{
     const { title } = req.body;
 
@@ -42,5 +44,37 @@ router.post("/add", async (req, res)=>{
         });
     }
 })
+
+// update todo
+router.put("/:id/update", async (req, res)=>{
+    const { id } = req.params;
+    const { title } = req.body;
+
+    if(!(id && title)) {
+        return res.status(400).json({
+            message: "Provide todo id, title to update!"
+        });
+    }
+
+    try {
+
+        await Todo.findOneAndUpdate({_id: id}, {
+            title
+        });
+
+        res.status(200).json({
+            message: "Todo updated!",
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(400).json({
+            message: "Something went wrong while updating todo!"
+        });
+    }
+})
+
+
+// delete todo
+
 
 module.exports = router;

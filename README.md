@@ -32,6 +32,18 @@ MONGODB_URL="paste your URL here"
         }
 </details>
 
+<details>
+    <summary>
+        `/todo/{id of todo}/update` - Update Todo
+    </summary>
+
+    Method: PUT
+    Body:
+        {
+            title: "Updated Todo Title"
+        }
+</details>
+
 
 ---
 
