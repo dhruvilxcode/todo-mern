@@ -44,6 +44,13 @@ MONGODB_URL="paste your URL here"
         }
 </details>
 
+<details>
+    <summary>
+        `/todo/{id of todo}/delete` - Delete Todo
+    </summary>
+
+    Method: DELETE
+</details>
 
 ---
 
