@@ -64,6 +64,14 @@ MONGODB_URL="paste your URL here"
         }
 </details>
 
+<details>
+    <summary>
+        `/todo/{id of todo}/get` - Get All Tasks
+    </summary>
+
+    Method: GET
+</details>
+
 ---
 
 ### Blog

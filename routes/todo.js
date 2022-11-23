@@ -137,5 +137,30 @@ router.post("/:id/addtask", async (req, res)=>{
     }
 })
 
+// read tasks
+router.get("/:id/get", async (req, res)=>{
+    const { id } = req.params;
+
+    try {
+        
+        const todo = await Todo.findOne({
+            _id: id
+        });
+
+        if(!todo) {
+            return res.status(400).json({
+                message: "Todo not found!"
+            });
+        }
+
+        res.status(201).json(todo.tasks);
+    } catch (error) {
+        console.error(error);
+        res.status(400).json({
+            message: "Something went wrong while getting Task!"
+        });
+    }
+})
+
 
 module.exports = router;
