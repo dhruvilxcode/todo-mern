@@ -100,7 +100,7 @@ router.delete("/:id/delete", async (req, res)=>{
 })
 
 // add tasks
-router.post("/:id/addtask", async (req, res)=>{
+router.post("/:id/tasks/add", async (req, res)=>{
     const { title } = req.body;
     const { id } = req.params;
 
@@ -138,9 +138,8 @@ router.post("/:id/addtask", async (req, res)=>{
 })
 
 // read tasks
-router.get("/:id/get", async (req, res)=>{
+router.get("/:id/tasks/get", async (req, res)=>{
     const { id } = req.params;
-
     try {
         
         const todo = await Todo.findOne({
@@ -162,5 +161,41 @@ router.get("/:id/get", async (req, res)=>{
     }
 })
 
+// delete task
+router.delete("/:id/tasks/delete", async (req, res)=>{
+    const { id } = req.params;
+    const { title } = req.body;
+    
+    if(!title) {
+        return res.status(400).json({
+            message: "Please provide task title to remove!"
+        });
+    }
+
+    try {
+        
+        const todo = await Todo.findOne({
+            _id: id
+        });
+
+        if(!todo) {
+            return res.status(400).json({
+                message: "Todo not found!"
+            });
+        }
+
+        todo.tasks = todo.tasks.filter(task => task !== title);
+        await todo.save();
+
+        res.status(201).json({
+            message: "Task removed"
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(400).json({
+            message: "Something went wrong while deleting Task!"
+        });
+    }
+})
 
 module.exports = router;

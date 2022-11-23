@@ -54,7 +54,7 @@ MONGODB_URL="paste your URL here"
 
 <details>
     <summary>
-        `/todo/{id of todo}/addtask` - Add Task
+        `/todo/{id of todo}/tasks/add` - Add Task
     </summary>
 
     Method: POST
@@ -66,12 +66,23 @@ MONGODB_URL="paste your URL here"
 
 <details>
     <summary>
-        `/todo/{id of todo}/get` - Get All Tasks
+        `/todo/{id of todo}/tasks/get` - Get All Tasks
     </summary>
 
     Method: GET
 </details>
 
+<details>
+    <summary>
+        `/todo/{id of todo}/tasks/delete` - Delete Task
+    </summary>
+
+    Method: DELETE
+    Body: 
+        {
+            title: "Task"
+        }
+</details>
 ---
 
 ### Blog
