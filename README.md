@@ -83,6 +83,20 @@ MONGODB_URL="paste your URL here"
             title: "Task"
         }
 </details>
+
+<details>
+    <summary>
+        `/todo/{id of todo}/tasks/update` - Update Task
+    </summary>
+
+    Method: PUT
+    Body: 
+        {
+            title: "Existing task title",
+            newTitle: "New title name to update"
+        }
+</details>
+
 ---
 
 ### Blog

@@ -198,4 +198,60 @@ router.delete("/:id/tasks/delete", async (req, res)=>{
     }
 })
 
+// update task
+router.put("/:id/tasks/update", async (req, res)=>{
+    const { id } = req.params;
+    const { title, newTitle } = req.body;
+    
+    if(!title) {
+        return res.status(400).json({
+            message: "Please provide task title to update!"
+        });
+    }
+
+    if(!newTitle) {
+        return res.status(400).json({
+            message: "Please provide new task title to update with!"
+        });
+    }
+
+    try {
+        
+        const todo = await Todo.findOne({
+            _id: id
+        });
+
+        if(!todo) {
+            return res.status(400).json({
+                message: "Todo not found!"
+            });
+        }
+
+        
+        const index = todo.tasks.indexOf(title);
+        
+        // if task is not in the DB.
+        if(index === -1) {
+            return res.status(400).json({
+                message: "Task not found!"
+            });
+        }
+
+        // update task
+        todo.tasks[index] = newTitle;
+
+        const newTodo = await todo.save();
+
+        res.status(201).json({
+            message: "Task updated",
+            data: newTodo
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(400).json({
+            message: "Something went wrong while updating Task!"
+        });
+    }
+})
+
 module.exports = router;
