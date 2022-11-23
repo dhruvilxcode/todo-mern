@@ -99,5 +99,43 @@ router.delete("/:id/delete", async (req, res)=>{
     }
 })
 
+// add tasks
+router.post("/:id/addtask", async (req, res)=>{
+    const { title } = req.body;
+    const { id } = req.params;
+
+    if(!title) {
+        res.status(400).json({
+            message: "Please provide required parameter Task 'Title'",
+        });
+    }
+
+    try {
+        
+        const todo = await Todo.findOne({
+            _id: id
+        });
+
+        if(!todo) {
+            return res.status(400).json({
+                message: "Todo not found!"
+            });
+        }
+
+        todo.tasks.push(title);
+        const savedTodo = await todo.save();
+
+        res.status(201).json({
+            message: "Task Added.",
+            data: savedTodo
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(400).json({
+            message: "Something went wrong while saving Task!"
+        });
+    }
+})
+
 
 module.exports = router;

@@ -52,6 +52,18 @@ MONGODB_URL="paste your URL here"
     Method: DELETE
 </details>
 
+<details>
+    <summary>
+        `/todo/{id of todo}/addtask` - Add Task
+    </summary>
+
+    Method: POST
+    Body: 
+        {
+            title: "Task"
+        }
+</details>
+
 ---
 
 ### Blog
