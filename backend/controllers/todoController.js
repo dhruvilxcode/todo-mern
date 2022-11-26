@@ -15,17 +15,22 @@ exports.getTodos =  async (req, res)=>{
 };
 
 exports.addTodo =  async (req, res)=>{
-    const { title } = req.body;
+    const { title, task } = req.body;
 
-    if(!title) {
+    if(!(title && task)) {
         res.status(400).json({
-            message: "Please provide required parameter 'Title'",
+            message: "Please provide required parameter 'Title' and atleast 1 task",
         });
     }
 
+    const tasks = [
+        task
+    ];
+
     try {
         const todo = new Todo({
-            title
+            title,
+            tasks
         });
 
         const savedTodo = await todo.save();
