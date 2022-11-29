@@ -54,7 +54,7 @@ const App = () => {
     }
 
     addTask(todoModalId, todoModalTask)
-      .then((resp) => {
+      .then(async (resp) => {
         if (resp.status === 201) {
           toast.success("Task created.");
 
@@ -66,7 +66,7 @@ const App = () => {
           });
 
           // reload the todos
-          getTodos();
+          await getTodos();
         }
       })
       .catch((e) => {
@@ -85,7 +85,7 @@ const App = () => {
 
     // call api to save details
     addTodo(todoTitle, todoFirstTask)
-      .then((resp) => {
+      .then(async (resp) => {
         if (resp.status === 201) {
           toast.success("Todo created.");
 
@@ -95,6 +95,9 @@ const App = () => {
             todoTitle: "",
             todoFirstTask: "",
           });
+
+          // get all todos
+          await getTodos();
         }
       })
       .catch((e) => {

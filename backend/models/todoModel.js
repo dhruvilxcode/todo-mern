@@ -6,7 +6,7 @@ const TodoSchema = new mongoose.Schema({
         required: true,
     },
     tasks: [String]
-})
+}, {timestamps: true})
 
 const TodoModel = mongoose.model('todo', TodoSchema)
 
