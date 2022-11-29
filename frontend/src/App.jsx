@@ -6,7 +6,7 @@ import { useState } from "react";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { addTodo, getAllTodos, addTask } from "./controllers/todo";
+import { addTodo, getAllTodos, addTask, deleteTodo } from "./controllers/todo";
 import { useEffect } from "react";
 import TodoCard from "./components/TodoCard";
 
@@ -124,6 +124,23 @@ const App = () => {
     }
   };
 
+  const btnDeleteTodo = (id) => {
+    try {
+      deleteTodo(id)
+        .then((resp) => {
+          if (resp.status === 200) {
+            window.location.reload();
+          }
+        })
+        .catch((e) => {
+          toast.error("Something went wrong while deleting todo");
+          console.error(e);
+        });
+    } catch (error) {
+      toast.error("something went wrong, while deleting todo!");
+    }
+  };
+
   useEffect(() => {
     getTodos();
   }, []);
@@ -146,8 +163,8 @@ const App = () => {
               title={todo.title}
               tasks={todo.tasks}
               key={todo._id}
-              onBtnTodoDelete={()=>{
-
+              onBtnTodoDelete={() => {
+                btnDeleteTodo(todo._id);
               }}
               onBtnAddTask={() => {
                 openTodoModalHandler(todo._id);
