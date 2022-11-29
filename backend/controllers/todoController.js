@@ -160,8 +160,7 @@ exports.getAllTasks =  async (req, res)=>{
 
 exports.deleteTask = async (req, res)=>{
     const { id } = req.params;
-    const { title } = req.body;
-    
+    const { title } = req.query;
     if(!title) {
         return res.status(400).json({
             message: "Please provide task title to remove!"

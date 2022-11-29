@@ -40,3 +40,15 @@ export const addTask = async (id, task) => {
         throw error;
     }
 }
+export const deleteTask = async (todoId, task) => {
+    try {
+        
+        const resp = await axios.delete(`${API}/todo/${todoId}/tasks/delete?title=${task}`)
+
+        return resp;
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
