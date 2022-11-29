@@ -7,16 +7,22 @@ import { useState } from "react";
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { addTodo } from "./controllers/todo";
+import { addTodo, getAllTodos, addTask } from "./controllers/todo";
+import { useEffect } from "react";
+import TodoCard from "./components/TodoCard";
+
 
 const App = () => {
 
   const [state, setState] = useState({
     todoTitle: "",
-    todoFirstTask: ""
+    todoFirstTask: "",
+    todos: [],
+    todoModalId: "",
+    todoModalTask: ""
   })
 
-  const { todoTitle, todoFirstTask } = state
+  const { todoTitle, todoFirstTask, todos, todoModalId, todoModalTask } = state
 
   const handleChange = e =>{
     setState({
@@ -26,10 +32,52 @@ const App = () => {
   }
 
   const modalCloseBtnRef = createRef();
+  const todoModalCloseBtnRef = createRef();
 
   // custom function to close modal using ref
   const closeModalHandler = () => {
     modalCloseBtnRef.current.click();
+  }
+
+  const closetodoModalHandler = () => {
+    todoModalCloseBtnRef.current.click();
+  }
+  const openTodoModalHandler = (id) => {
+    todoModalCloseBtnRef.current.click();
+    setState({
+      ...state,
+      todoModalId: id,
+    })
+  }
+
+  const handleModalTaskSave = () =>{
+    if(!todoModalTask) {
+      toast.error("Please provide task!");
+      return;
+    }
+
+    addTask(todoModalId, todoModalTask)
+    .then(resp=>{
+      if(resp.status === 201) {
+        toast.success("Task created.");
+    
+        // clear the form values
+        setState({
+          ...state, 
+          todoModalId: "",
+          todoModalTask: ""
+        });
+
+        // reload the todos
+        getTodos();
+      }
+    })
+    .catch(e=>{
+      toast.error("Something went wrong while adding details");
+      console.error(e);
+    })
+
+    closetodoModalHandler();
   }
 
   const handleModalSave = () =>{
@@ -58,11 +106,32 @@ const App = () => {
       console.error(e);
     })
 
-
-    
-
     closeModalHandler();
   }
+
+  const getTodos = async () => {
+    try {
+      const resp = await getAllTodos();
+
+      if(resp.status === 200) {
+        const allTodos = resp.data;
+
+        setState({
+          ...state,
+          todos: allTodos
+        });
+
+        return;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(()=>{
+    getTodos();
+  },[]);
+
 
   return (
     <div className="w-full sm:w-3/4 md:w-2/4 lg:w-2/4 xl:w-1/3 mx-auto">
@@ -77,14 +146,15 @@ const App = () => {
 
       {/* todo cards */}
       <div className="px-6">
-        <div className="card bg-base-100 shadow-xl">
-          <div className="card-body">
-            <p className="card-title">Todo Title</p>
-            1. Task 1
-            2. Task 2
-          </div>
-        </div>
+
+        {
+          todos.length > 0 ?
+          todos.map(todo=><TodoCard title={todo.title} tasks={todo.tasks} key={todo._id} onBtnAddTask={()=>{openTodoModalHandler(todo._id);}} />)
+      
+          : <div>No todos found!</div>
+        }
       </div>
+        
       {/* todo cards */}
 
 
@@ -135,6 +205,39 @@ const App = () => {
         </div>
       </div>
       {/* modal */}
+
+
+      {/* modal add task */}
+      <input type="checkbox" id="my-modal-add-task" className="modal-toggle" />
+
+      <div className="modal modal-bottom sm:modal-middle">
+        <div className="modal-box">
+          <h3 className="font-bold text-lg">Add New Task</h3>
+          
+
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text">Task</span>
+            </label>
+            <input
+              type="text"
+              placeholder="Write Task detail here..."
+              className="input input-bordered w-full"
+              name="todoModalTask"
+              value={todoModalTask}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="modal-action">
+            <button className="btn btn-primary" onClick={handleModalTaskSave}>Save</button>
+            <label htmlFor="my-modal-add-task" ref={todoModalCloseBtnRef} className="btn btn-ghost">
+              Cancel!
+            </label>
+          </div>
+        </div>
+      </div>
+      {/* modal add task */}
     </div>
   );
 };
