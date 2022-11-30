@@ -1,7 +1,7 @@
 import React from 'react'
 import { toast } from 'react-toastify';
 import { deleteTask } from "../controllers/todo";
-const TodoCard = ({title, tasks, todoId, onBtnTodoDelete, onBtnAddTask}) => {
+const TodoCard = ({title, tasks, todoId, onBtnTodoDelete, onBtnAddTask, onBtnUpdateTask}) => {
   const onBtnDeleteTask = (task) => {
     try {
       deleteTask(todoId, task)
@@ -41,7 +41,9 @@ const TodoCard = ({title, tasks, todoId, onBtnTodoDelete, onBtnAddTask}) => {
             <li key={task} className="px-2 py-3 cursor-pointer hover:bg-slate-100 rounded-lg flex items-center justify-between">
               <div>{task}</div>
               <div>
-                <button className="btn btn-circle btn-ghost btn-sm">
+                <button className="btn btn-circle btn-ghost btn-sm" onClick={()=>{
+                  onBtnUpdateTask(task);
+                }}>
                   <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M5 19h1.4l8.625-8.625-1.4-1.4L5 17.6ZM19.3 8.925l-4.25-4.2 1.4-1.4q.575-.575 1.413-.575.837 0 1.412.575l1.4 1.4q.575.575.6 1.388.025.812-.55 1.387ZM17.85 10.4 7.25 21H3v-4.25l10.6-10.6Zm-3.525-.725-.7-.7 1.4 1.4Z"/></svg>
                 </button>
                 <button className="btn btn-circle btn-ghost btn-sm" onClick={()=>{

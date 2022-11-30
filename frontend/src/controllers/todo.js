@@ -65,3 +65,19 @@ export const deleteTask = async (todoId, task) => {
         throw error;
     }
 }
+
+export const updateTask = async (todoId, task, updatedTask) => {
+    try {
+        
+        const resp = await axios.put(`${API}/todo/${todoId}/tasks/update`, {
+            title: task,
+            newTitle: updatedTask
+        })
+
+        return resp;
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
