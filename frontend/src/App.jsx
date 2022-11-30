@@ -6,7 +6,7 @@ import { useState } from "react";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { addTodo, getAllTodos, addTask, deleteTodo, updateTask } from "./controllers/todo";
+import { addTodo, getAllTodos, addTask, deleteTodo, updateTask, updateTodo } from "./controllers/todo";
 import { useEffect } from "react";
 import TodoCard from "./components/TodoCard";
 
@@ -18,10 +18,12 @@ const App = () => {
     todoModalId: "",
     todoModalTask: "",
     todoModalUpdateTask: "",
-    todoModalUpdateTaskNew: ""
+    todoModalUpdateTaskNew: "",
+    todoModalUpdateTodo: "",
+    todoModalUpdateTodoNew: ""
   });
 
-  const { todoTitle, todoFirstTask, todos, todoModalId, todoModalTask, todoModalUpdateTask, todoModalUpdateTaskNew } = state;
+  const { todoTitle, todoFirstTask, todos, todoModalId, todoModalTask, todoModalUpdateTask, todoModalUpdateTaskNew, todoModalUpdateTodo, todoModalUpdateTodoNew } = state;
 
   const handleChange = (e) => {
     setState({
@@ -33,6 +35,7 @@ const App = () => {
   const modalCloseBtnRef = createRef();
   const todoModalCloseBtnRef = createRef();
   const todoUpdateModalCloseBtnRef = createRef();
+  const todoUpdateTitleModalCloseBtnRef = createRef();
 
   // custom function to close modal using ref
   const closeModalHandler = () => {
@@ -45,6 +48,10 @@ const App = () => {
 
   const closeTodoTaskUpdateModal = () =>{
     todoUpdateModalCloseBtnRef.current.click();
+  }
+
+  const closeTodoUpdateModal = () =>{
+    todoUpdateTitleModalCloseBtnRef.current.click();
   }
 
   const openTodotaskUpdateModal = (id, task) => {
@@ -64,6 +71,48 @@ const App = () => {
       todoModalId: id,
     });
   };
+
+  const openTodoUpdateModal = (id, title) => {
+    todoUpdateTitleModalCloseBtnRef.current.click();
+    setState({
+      ...state,
+      todoModalId: id,
+      todoModalUpdateTodo: title,
+      todoModalUpdateTodoNew: title,
+    });
+  }
+
+  const handleModalTodoUpdate = () =>{
+    // update todo title
+
+    if(!(todoModalId && todoModalUpdateTodo && todoModalUpdateTodoNew)) {
+      toast.error("something went wrong")
+      return;
+    }
+
+    updateTodo(todoModalId, todoModalUpdateTodoNew)
+    .then(async resp=>{
+      if(resp.status === 200) {
+        toast.success("Todo updated");
+        setState({
+          ...state,
+          todoModalId: "",
+          todoModalUpdateTodo: "",
+          todoModalUpdateTodoNew: "",
+        });
+        closeTodoUpdateModal();
+        await getTodos();
+        return;
+      }
+
+      toast.error("can't update todo right now!, try later");
+    })
+    .catch(e=>{
+      toast.error("Something went wrong while changing details");
+      console.error(e);
+    })
+
+  }
 
   const handleModalTaskUpdate = () => {
     // task update
@@ -214,6 +263,9 @@ const App = () => {
               title={todo.title}
               tasks={todo.tasks}
               key={todo._id}
+              onBtnTodoUpdate={()=>{
+                openTodoUpdateModal(todo._id, todo.title);
+              }}
               onBtnTodoDelete={() => {
                 btnDeleteTodo(todo._id);
               }}
@@ -359,6 +411,44 @@ const App = () => {
         </div>
       </div>
       {/* modal update task */}
+
+
+      {/* modal update todo */}
+      <input type="checkbox" id="my-modal-update-todo" className="modal-toggle" />
+
+      <div className="modal modal-bottom sm:modal-middle">
+        <div className="modal-box">
+          <h3 className="font-bold text-lg">Update Todo</h3>
+
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text">Todo Title</span>
+            </label>
+            <input
+              type="text"
+              placeholder="Write Todo title here..."
+              className="input input-bordered w-full"
+              name="todoModalUpdateTodoNew"
+              value={todoModalUpdateTodoNew}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="modal-action">
+            <button className="btn btn-primary" onClick={handleModalTodoUpdate}>
+              Save
+            </button>
+            <label
+              htmlFor="my-modal-update-todo"
+              ref={todoUpdateTitleModalCloseBtnRef}
+              className="btn btn-ghost"
+            >
+              Cancel!
+            </label>
+          </div>
+        </div>
+      </div>
+      {/* modal update todo */}
     </div>
   );
 };
