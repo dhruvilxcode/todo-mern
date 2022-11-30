@@ -206,7 +206,7 @@ const App = () => {
       {/* todo heading */}
 
       {/* todo cards */}
-      <div className="px-6">
+      <div className="px-6 pb-28">
         {todos.length > 0 ? (
           todos.map((todo) => (
             <TodoCard
