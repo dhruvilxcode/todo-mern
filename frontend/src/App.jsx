@@ -23,6 +23,9 @@ const App = () => {
     todoModalUpdateTodoNew: ""
   });
 
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchStr, setSearchStr] = useState("");
+
   const { todoTitle, todoFirstTask, todos, todoModalId, todoModalTask, todoModalUpdateTask, todoModalUpdateTaskNew, todoModalUpdateTodo, todoModalUpdateTodoNew } = state;
 
   const handleChange = (e) => {
@@ -251,34 +254,71 @@ const App = () => {
       <FabAdd htmlFor="my-modal" />
 
       {/* todo heading */}
-      <h1 className="text-3xl mt-4 text-center">Get things done!</h1>
+      <div className="flex justify-between items-center px-9 py-9">
+        <div></div>
+        <h1 className="text-3xl text-center">Get things done!</h1>
+        <div>
+          <button onClick={()=>{
+            setShowSearch(!showSearch)
+          }} className="btn btn-circle border-transparent btn-outline btn-ghost btn-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="m19.6 21-6.3-6.3q-.75.6-1.725.95Q10.6 16 9.5 16q-2.725 0-4.612-1.887Q3 12.225 3 9.5q0-2.725 1.888-4.613Q6.775 3 9.5 3t4.613 1.887Q16 6.775 16 9.5q0 1.1-.35 2.075-.35.975-.95 1.725l6.3 6.3ZM9.5 14q1.875 0 3.188-1.312Q14 11.375 14 9.5q0-1.875-1.312-3.188Q11.375 5 9.5 5 7.625 5 6.312 6.312 5 7.625 5 9.5q0 1.875 1.312 3.188Q7.625 14 9.5 14Z"/></svg>
+          </button>
+        </div>
+      </div>
       {/* todo heading */}
+
+
+      {/* search */}
+      {showSearch?<div className="w-full mb-4 px-6">
+        <input
+          type="text"
+          className="input input-bordered w-full"
+          placeholder="Search..."
+          value={searchStr}
+          onChange={e=>{
+            setSearchStr(e.target.value);
+          }}
+        />
+      </div>:<></>}
+      {/* search */}
+
 
       {/* todo cards */}
       <div className="px-6 pb-28">
         {todos.length > 0 ? (
-          todos.map((todo) => (
-            <TodoCard
-              todoId={todo._id}
-              title={todo.title}
-              tasks={todo.tasks}
-              key={todo._id}
-              onBtnTodoUpdate={()=>{
-                openTodoUpdateModal(todo._id, todo.title);
-              }}
-              onBtnTodoDelete={() => {
-                btnDeleteTodo(todo._id);
-              }}
-              onBtnAddTask={() => {
-                openTodoModalHandler(todo._id);
-              }}
-              onBtnUpdateTask={
-                (task)=>{
-                  openTodotaskUpdateModal(todo._id, task);
+          <>
+            {
+              todos.filter(todo=> {
+                if(searchStr) {
+                  if(todo.title.toLowerCase().search(searchStr) != -1 || todo.tasks.some(t=>t.toLowerCase().includes(searchStr))) {
+                    return true;
+                  }
+                  return false;
                 }
-              }
-            />
-          ))
+                return true;
+              } ).map(todo=>
+              <TodoCard
+                todoId={todo._id}
+                title={todo.title}
+                tasks={todo.tasks}
+                key={todo._id}
+                onBtnTodoUpdate={()=>{
+                  openTodoUpdateModal(todo._id, todo.title);
+                }}
+                onBtnTodoDelete={() => {
+                  btnDeleteTodo(todo._id);
+                }}
+                onBtnAddTask={() => {
+                  openTodoModalHandler(todo._id);
+                }}
+                onBtnUpdateTask={
+                  (task)=>{
+                    openTodotaskUpdateModal(todo._id, task);
+                  }
+                }
+              />)
+            }
+          </>
         ) : (
           <div>No todos found!</div>
         )}
