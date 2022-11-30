@@ -10,6 +10,7 @@
 - SEARCH
 - Good UI
 - Mobile Responsive
+- PWA 
 
 ### Technologies Used
 
@@ -17,6 +18,7 @@
 - NodeJS, Express 🖥
 - Mongoose, MongoDB 🫙
 - Railway 🚄
+- PWA - Progressive Web App
 
 
 ---
