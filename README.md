@@ -3,6 +3,8 @@
 ### Preview
 [https://todo-mern-production.up.railway.app/](https://todo-mern-production.up.railway.app/)
 
+![preview](./preview.png)
+
 ### Features
 
 - CRUD Todo List
